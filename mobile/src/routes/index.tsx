@@ -1,23 +1,21 @@
-import { useContext } from 'react';
+import { useTheme, Box } from 'native-base'
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
 
-import { useTheme, Box } from 'native-base';
-import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
+import { useAuth } from '@hooks/useAuth'
 
-import { useAuth } from '@hooks/useAuth';
-
-import { AuthRoutes } from "./auth.routes";
-import { AppRoutes } from "./app.routes";
-import { Loading } from '@components/Loading';
+import { AuthRoutes } from './auth.routes'
+import { AppRoutes } from './app.routes'
+import { Loading } from '@components/Loading'
 
 export function Routes() {
-  const { colors } = useTheme();
+  const { colors } = useTheme()
 
-  const { user, isLoadingUserStorageData } = useAuth();
+  const { user, isUserDataOnStorageLoading } = useAuth()
 
-  const theme = DefaultTheme;
-  theme.colors.background = colors.gray[700];
+  const theme = DefaultTheme
+  theme.colors.background = colors.gray[700]
 
-  if(isLoadingUserStorageData) {
+  if (isUserDataOnStorageLoading) {
     return <Loading />
   }
 
@@ -27,5 +25,5 @@ export function Routes() {
         {user.id ? <AppRoutes /> : <AuthRoutes />}
       </NavigationContainer>
     </Box>
-  );
+  )
 }
