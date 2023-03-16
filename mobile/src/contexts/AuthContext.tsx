@@ -16,10 +16,10 @@ import { UserDTO } from '@dtos/UserDTO'
 
 export type AuthContextDataProps = {
   user: UserDTO
-  singIn: (email: string, password: string) => Promise<void>
-  updateUserProfile: (userUpdated: UserDTO) => Promise<void>
-  signOut: () => Promise<void>
   isUserDataOnStorageLoading: boolean
+  singIn: (email: string, password: string) => Promise<void>
+  signOut: () => Promise<void>
+  updateUserProfile: (userUpdated: UserDTO) => Promise<void>
 }
 
 type AuthContextProviderProps = {
@@ -39,8 +39,6 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     userData: UserDTO,
     token: string,
   ) {
-    api.defaults.headers.common.Authorization = `Bearer ${token}`
-
     setUser(userData)
   }
 
@@ -50,6 +48,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     refresh_token: string,
   ) {
     setIsUserDataOnStorageLoading(true)
+
     await storageSaveUser(userData)
     await storageSaveAuthToken({ token, refresh_token })
 
@@ -81,7 +80,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     await storageSaveUser(userUpdated)
   }
 
-  async function loadUserData() {
+  async function loadUserDataOnStartApp() {
     setIsUserDataOnStorageLoading(true)
 
     const userLogged = await storageGetUser()
@@ -95,7 +94,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   }
 
   useEffect(() => {
-    loadUserData()
+    loadUserDataOnStartApp()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

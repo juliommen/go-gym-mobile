@@ -69,11 +69,13 @@ export function Home() {
 
   useEffect(() => {
     fetchGroups()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useFocusEffect(
     useCallback(() => {
       fecthExercisesByGroup()
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [groupSelected]),
   )
 
